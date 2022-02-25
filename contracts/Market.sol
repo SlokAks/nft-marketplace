@@ -35,6 +35,11 @@ contract Market {
         uint price
     );
 
+    event Cancel (
+        uint listingId,
+        address seller
+    );
+
     uint private _listingId = 0;
     mapping (uint => Listing) private _listings;
 
@@ -90,7 +95,13 @@ contract Market {
 
         require(listing.status == ListingStatus.Active, "Listing is not active");
         require(msg.sender == listing.seller, "Only seller can cancel listing");
+        
         listing.status = ListingStatus.Cancelled;
         IERC721(listing.token).transferFrom(address(this), msg.sender, listing.tokenId); 
+
+        emit Cancel(
+            listingId, 
+            msg.sender
+        );
     }
 }
