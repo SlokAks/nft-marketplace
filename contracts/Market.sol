@@ -19,6 +19,14 @@ contract Market {
         uint price;
     }
 
+    event Listed (
+        uint listingId,
+        address seller,
+        address token,
+        uint tokenId, 
+        uint price
+    );
+
     uint private _listingId = 0;
     mapping (uint => Listing) private _listings;
 
@@ -35,6 +43,14 @@ contract Market {
 
         _listingId++;
         _listings[_listingId] = listing;
+
+        emit Listed(
+            _listingId, 
+            msg.sender, 
+            token, 
+            tokenId, 
+            price
+        );
     }
 
     function buyToken(uint listingId) external payable {
